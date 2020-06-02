@@ -7,13 +7,19 @@
 /*  ================== */
 
 /** 1) Install & Set up mongoose */
-
+var mongoose = require("mongoose");
+process.env.MONGO_URI="mongodb+srv://micky_ngub:112233445566@cluster0-zlqnr.mongodb.net/test?retryWrites=true&w=majority"
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 // Add mongodb and mongoose to the project's package.json. Then require 
 // mongoose. Store your Mongo Atlas database URI in the private .env file 
 // as MONGO_URI. Connect to the database using the following syntax:
 //
 // mongoose.connect(<Your URI>, { useNewUrlParser: true, useUnifiedTopology: true }); 
-
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("We're in!");
+});
 
 
 /** # SCHEMAS and MODELS #
@@ -41,7 +47,17 @@
 
 // <Your code here >
 
-var Person /* = <Your Model> */
+var personSchema = new mongoose.Schema({
+  name: {type: String, required: true},
+  age: Number,
+  favoriteFoods: [String]
+});
+
+
+var Person = mongoose.model("Person", personSchema);
+var p1 = new Person({name: "Peter", age: 44});
+
+console.log(`${p1.name} ${p1.age}`);
 
 // **Note**: Glitch is a real server, and in real servers interactions with
 // the db are placed in handler functions, to be called when some event happens
