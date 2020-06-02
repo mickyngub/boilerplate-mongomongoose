@@ -143,7 +143,7 @@ var createManyPeople = function(arrayOfPeople, done) {
 // Use the function argument `personName` as search key.
 
 var findPeopleByName = function(personName, done) {
-  Person.find(personName.name, function(err, people) {
+  Person.find({name: personName}, function(err, people) {
     if(err) {
       return console.error(err);
     }
@@ -162,11 +162,7 @@ var findPeopleByName = function(personName, done) {
 // using `Model.findOne() -> Person`. Use the function
 // argument `food` as search key
 
-var findOneByFood = function(food, done) {
 
-  done(null/*, data*/);
-  
-};
 
 /** 7) Use `Model.findById()` */
 
