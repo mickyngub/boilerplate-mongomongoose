@@ -92,13 +92,13 @@ var Person = mongoose.model("Person", personSchema);
 //    ...do your stuff here...
 // });
 
-var createAndSavePerson = function(done) {
+var createAndSavePerson = (done) => {
   
   var p1 = new Person({name: "Peter", age: 44, favoriteFoods: ["cookie","candy"]});
 
   console.log(`${p1.name} ${p1.age} ${p1.favoriteFoods}`);
 
-  p1.save(function(err, data) {
+  p1.save((err, data) => {
     if(err) {
       return console.error(err);
     }
@@ -120,8 +120,8 @@ var createAndSavePerson = function(done) {
 // 'arrayOfPeople'.
 const arrayOfPeople = [{name: "Micky", age:20}, {name: "Opal", age:20, favoriteFoods:["Chocolate"]}];
 
-var createManyPeople = function(arrayOfPeople, done) {
-    Person.create(arrayOfPeople, function(err, people) {
+var createManyPeople = (arrayOfPeople, done) => {
+    Person.create(arrayOfPeople, (err, people) => {
     if(err) {
       return console.error(err);
     }
@@ -142,8 +142,8 @@ var createManyPeople = function(arrayOfPeople, done) {
 // It supports an extremely wide range of search options. Check it in the docs.
 // Use the function argument `personName` as search key.
 
-var findPeopleByName = function(personName, done) {
-  Person.find({name: personName}, function(err, people) {
+var findPeopleByName = (personName, done) => {
+  Person.find({name: personName}, (err, people) => {
     if(err) {
       return console.error(err);
     }
@@ -162,8 +162,8 @@ var findPeopleByName = function(personName, done) {
 // using `Model.findOne() -> Person`. Use the function
 // argument `food` as search key
 
-var findOneByFood = function(food, done) {
-  Person.findOne({favoriteFoods: [food]}, function(err, people) {
+var findOneByFood = (food, done) => {
+  Person.findOne({favoriteFoods: [food]}, (err, people) => {
     if(err) {
       return console.error(err);
     }
@@ -182,8 +182,8 @@ var findOneByFood = function(food, done) {
 // using `Model.findById() -> Person`.
 // Use the function argument 'personId' as search key.
 
-var findPersonById = function(personId, done) {
-  Person.findById(personId, function(err, people) {
+var findPersonById = (personId, done) => {
+  Person.findById(personId, (err, people) => {
     if(err) {
       console.error(err);
     }
@@ -217,21 +217,17 @@ var findPersonById = function(personId, done) {
 // manually mark it as edited using `document.markModified('edited-field')`
 // (http://mongoosejs.com/docs/schematypes.html - #Mixed )
 
-var findEditThenSave = function(personId, done) {
+var findEditThenSave = (personId, done) => {
   var foodToAdd = 'hamburger';
-  Person.findById(personId, function(err, people) {
+  Person.findById(personId, (err, people) => {
     if(err) {
       console.error(err);
     }
     
     people.favoriteFoods.push(foodToAdd);
-    people.save( (err, data) => err ? console.error(err) :  done(null, data)); 
-      
-     
-    
+    people.save( (err, data) => err ? console.error(err) : done(null, data)); 
   });
-  
- 
+
 };
 
 /** 9) New Update : Use `findOneAndUpdate()` */
@@ -249,11 +245,12 @@ var findEditThenSave = function(personId, done) {
 // to `findOneAndUpdate()`. By default the method
 // passes the unmodified object to its callback.
 
-var findAndUpdate = function(personName, done) {
+var findAndUpdate = (personName, done) => {
   var ageToSet = 20;
   Person.findOneAndUpdate(
     {name: personName}, 
     {age: ageToSet},
+    {new : true},
     (err, people) => {
     
     if(err) {
@@ -261,7 +258,7 @@ var findAndUpdate = function(personName, done) {
     } 
     done(null, people);
       
-  }, { new : true } );
+  });
 
 };
 
@@ -275,7 +272,7 @@ var findAndUpdate = function(personName, done) {
 // previous update methods. They pass the removed document to the cb.
 // As usual, use the function argument `personId` as search key.
 
-var removeById = function(personId, done) {
+var removeById = (personId, done) => {
   Person.findOneAndRemove({_id:personId}, (err,people) => {
     if(err) {
       console.error(err);
@@ -296,7 +293,7 @@ var removeById = function(personId, done) {
 // containing the outcome of the operation, and the number of items affected.
 // Don't forget to pass it to the `done()` callback, since we use it in tests.
 
-var removeManyPeople = function(done) {
+var removeManyPeople = (done) => {
   var nameToRemove = "Mary";
   Person.remove({name: nameToRemove}, (err, data) => {
     if(err) {
@@ -325,7 +322,7 @@ var removeManyPeople = function(done) {
 // Chain `.find()`, `.sort()`, `.limit()`, `.select()`, and then `.exec()`,
 // passing the `done(err, data)` callback to it.
 
-var queryChain = function(done) {
+var queryChain = (done) => {
   var foodToSearch = "burrito";
   Person.find({favoriteFoods: foodToSearch}).sort({name: 1}).limit(2).select({age:0}).exec((err,data) => {
     if(err) {
